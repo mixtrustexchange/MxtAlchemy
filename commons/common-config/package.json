@@ -1,0 +1,24 @@
+{
+  "name": "@alchemyio/common-config",
+  "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Common configuration used by all Hardhat packages",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "2.2.1",
+    "@nomiclabs/hardhat-etherscan": "3.1.3",
+    "@alchemyio/hardhat-storage": "workspace:*",
+    "@alchemyio/router": "workspace:*",
+    "@typechain/ethers-v5": "10.1.0",
+    "@typechain/hardhat": "6.1.3",
+    "dotenv": "16.0.1",
+    "hardhat": "2.13.0",
+    "hardhat-cannon": "2.1.10",
+    "hardhat-contract-sizer": "2.1.1",
+    "hardhat-gas-reporter": "1.0.9",
+    "hardhat-ignore-warnings": "0.2.5",
+    "solidity-coverage": "0.8.2",
+    "typechain": "8.1.1"
+  }
+}

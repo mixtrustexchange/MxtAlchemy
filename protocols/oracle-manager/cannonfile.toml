@@ -1,0 +1,46 @@
+name = "oracle-manager"
+version = "<%= package.version %>"
+description = "Core alchemy oracle manager"
+
+# `salt` here only affects proxy contract
+[setting.salt]
+description = "Change this to a unique string when deploying multiple instances of the system. Note that only the proxy contract will be unique."
+defaultValue = "oracle-manager-official"
+
+[setting.owner]
+description = "Admin user for the system"
+defaultValue = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+
+[contract.NodeModule]
+artifact = "contracts/modules/NodeModule.sol:NodeModule"
+
+[contract.CoreModule]
+artifact = "contracts/modules/CoreModule.sol:CoreModule"
+salt = "<%= settings.salt %>"
+create2 = true
+
+[contract.InitialProxy]
+artifact = "contracts/Proxy.sol:Proxy"
+args = ["<%= contracts.CoreModule.address %>", "<%= settings.owner %>"]
+salt = "<%= settings.salt %>"
+abiOf = ["CoreModule"]
+create2 = true
+
+depends = ["contract.CoreModule"]
+
+[router.OracleRouter]
+contracts = ["CoreModule", "NodeModule"]
+depends = [
+  "contract.CoreModule",
+  "contract.NodeModule"
+]
+
+[invoke.upgrade_proxy]
+target = ["InitialProxy"]
+fromCall.func = "owner"
+func = "upgradeTo"
+args = ["<%= contracts.OracleRouter.address %>"]
+factory.Proxy.abiOf = ["OracleRouter"]
+factory.Proxy.event = "Upgraded"
+factory.Proxy.arg = 0
+depends = ["contract.InitialProxy", "router.OracleRouter"]

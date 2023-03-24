@@ -1,0 +1,38 @@
+name = "alchemy-collateral-alchemy"
+version = "0.0.0"
+description = "Creates the spartan council pool"
+
+[setting.owner]
+defaultValue = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+
+[setting.alchemy_package]
+defaultValue = "alchemy:<%= package.version %>"
+
+[setting.alchemy_address]
+defaultValue = "0x0000000000000000000000000000000000000000"
+
+[setting.alchemy_aggregator_address]
+defaultValue = "0x0000000000000000000000000000000000000000"
+
+[import.system]
+source = "<%= settings.alchemy_package %>"
+options.owner = "<%= settings.owner %>"
+
+[invoke.configure_collateral]
+target = ["system.CoreProxy"]
+from = "<%= settings.owner %>"
+func = "configureCollateral"
+args = [
+  {
+    tokenAddress = "<%= settings.alchemy_address %>"
+    priceFeed = "<%= settings.alchemy_aggregator_address %>"
+    issuanceRatio = "300000000000000000000"
+    liquidationRatio = "150000000000000000000"
+    liquidationReward = "1000000000000000000"
+    minDelegation = "1000000000000000000"
+    depositingEnabled = true
+  }
+]
+depends = [
+  "import.system"
+]

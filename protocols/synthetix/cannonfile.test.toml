@@ -1,0 +1,144 @@
+# overrides to create a testable deployment of the core system
+
+version = "<%= package.version %>-testable"
+
+include = [
+  "cannonfile.toml"
+]
+
+# Test Modules
+[contract.TestableAccountStorage]
+artifact = "contracts/generated/test/TestableAccountStorage.sol:TestableAccountStorage"
+
+[contract.TestableAccountRBACStorage]
+artifact = "contracts/generated/test/TestableAccountRBACStorage.sol:TestableAccountRBACStorage"
+
+[contract.TestableCollateralStorage]
+artifact = "contracts/generated/test/TestableCollateralStorage.sol:TestableCollateralStorage"
+
+[contract.TestableCollateralConfigurationStorage]
+artifact = "contracts/generated/test/TestableCollateralConfigurationStorage.sol:TestableCollateralConfigurationStorage"
+
+[contract.TestableCollateralLockStorage]
+artifact = "contracts/generated/test/TestableCollateralLockStorage.sol:TestableCollateralLockStorage"
+
+[contract.TestableDistributionStorage]
+artifact = "contracts/generated/test/TestableDistributionStorage.sol:TestableDistributionStorage"
+
+[contract.TestableDistributionActorStorage]
+artifact = "contracts/generated/test/TestableDistributionActorStorage.sol:TestableDistributionActorStorage"
+
+[contract.TestableMarketStorage]
+artifact = "contracts/generated/test/TestableMarketStorage.sol:TestableMarketStorage"
+
+[contract.TestableMarketConfigurationStorage]
+artifact = "contracts/generated/test/TestableMarketConfigurationStorage.sol:TestableMarketConfigurationStorage"
+
+[contract.TestableMarketPoolInfoStorage]
+artifact = "contracts/generated/test/TestableMarketPoolInfoStorage.sol:TestableMarketPoolInfoStorage"
+
+[contract.TestablePoolStorage]
+artifact = "contracts/generated/test/TestablePoolStorage.sol:TestablePoolStorage"
+
+[contract.TestableSystemPoolConfigurationStorage]
+artifact = "contracts/generated/test/TestableSystemPoolConfigurationStorage.sol:TestableSystemPoolConfigurationStorage"
+
+[contract.TestableRewardDistributionStorage]
+artifact = "contracts/generated/test/TestableRewardDistributionStorage.sol:TestableRewardDistributionStorage"
+
+[contract.TestableRewardDistributionClaimStatusStorage]
+artifact = "contracts/generated/test/TestableRewardDistributionClaimStatusStorage.sol:TestableRewardDistributionClaimStatusStorage"
+
+[contract.TestableScalableMappingStorage]
+artifact = "contracts/generated/test/TestableScalableMappingStorage.sol:TestableScalableMappingStorage"
+
+[contract.TestableVaultEpochStorage]
+artifact = "contracts/generated/test/TestableVaultEpochStorage.sol:TestableVaultEpochStorage"
+
+[contract.TestableVaultStorage]
+artifact = "contracts/generated/test/TestableVaultStorage.sol:TestableVaultStorage"
+
+# Core
+[router.CoreRouter]
+contracts = [
+    "InitialModuleBundle",
+    "FeatureFlagModule",
+    "AccountModule",
+    "AssociateDebtModule",
+    "AssociatedSystemsModule",
+    "CollateralModule",
+    "CollateralConfigurationModule",
+    "IssueUSDModule",
+    "LiquidationModule",
+    "MarketCollateralModule",
+    "MarketManagerModule",
+    "MulticallModule",
+    "PoolConfigurationModule",
+    "PoolModule",
+    "RewardsManagerModule",
+    "UtilsModule",
+    "VaultModule",
+    "TestableAccountStorage",
+    "TestableAccountRBACStorage",
+    "TestableCollateralStorage",
+    "TestableCollateralConfigurationStorage",
+    "TestableCollateralLockStorage",
+    "TestableDistributionStorage",
+    "TestableDistributionActorStorage",
+    "TestableMarketStorage",
+    "TestableMarketConfigurationStorage",
+    "TestablePoolStorage",
+    "TestableSystemPoolConfigurationStorage",
+    "TestableRewardDistributionStorage",
+    "TestableRewardDistributionClaimStatusStorage",
+    "TestableScalableMappingStorage",
+    "TestableVaultEpochStorage",
+    "TestableVaultStorage",
+]
+
+depends = [
+  "contract.InitialModuleBundle",
+  "contract.FeatureFlagModule",
+  "contract.AccountModule",
+  "contract.AssociateDebtModule",
+  "contract.AssociatedSystemsModule",
+  "contract.CollateralModule",
+  "contract.CollateralConfigurationModule",
+  "contract.IssueUSDModule",
+  "contract.LiquidationModule",
+  "contract.MarketCollateralModule",
+  "contract.MarketManagerModule",
+  "contract.MulticallModule",
+  "contract.PoolConfigurationModule",
+  "contract.PoolModule",
+  "contract.RewardsManagerModule",
+  "contract.UtilsModule",
+  "contract.VaultModule",
+  "contract.TestableAccountStorage",
+  "contract.TestableAccountRBACStorage",
+  "contract.TestableCollateralStorage",
+  "contract.TestableCollateralConfigurationStorage",
+  "contract.TestableCollateralLockStorage",
+  "contract.TestableDistributionStorage",
+  "contract.TestableDistributionActorStorage",
+  "contract.TestableMarketStorage",
+  "contract.TestableMarketConfigurationStorage",
+  "contract.TestableMarketPoolInfoStorage",
+  "contract.TestablePoolStorage",
+  "contract.TestableSystemPoolConfigurationStorage",
+  "contract.TestableRewardDistributionStorage",
+  "contract.TestableRewardDistributionClaimStatusStorage",
+  "contract.TestableScalableMappingStorage",
+  "contract.TestableVaultEpochStorage",
+  "contract.TestableVaultStorage",
+]
+
+# Post stuff
+[contract.CollateralMock]
+artifact = "contracts/mocks/CollateralMock.sol:CollateralMock"
+
+[invoke.intializeCollateralMock]
+target = ["CollateralMock"]
+func = "initialize"
+args = ["SampleToken","TKN","18"]
+depends = ["contract.CollateralMock"]

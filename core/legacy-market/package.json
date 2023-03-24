@@ -1,0 +1,26 @@
+{
+  "name": "@alchemyio/legacy-market",
+  "version": "0.1.0",
+  "description": "Contract for migration from v2x to v3",
+  "private": true,
+  "scripts": {
+    "test": "hardhat test",
+    "coverage": "hardhat coverage",
+    "clean": "hardhat clean",
+    "compile-contracts": "hardhat compile",
+    "size-contracts": "hardhat compile && hardhat size-contracts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@alchemyio/common-config": "workspace:*",
+    "@alchemyio/core-utils": "workspace:*",
+    "@alchemyio/main": "workspace:*",
+    "@alchemyio/wei": "2.74.4",
+    "ethers": "^5.0.0",
+    "hardhat": "2.13.0",
+    "solidity-docgen": "0.6.0-beta.31",
+    "alchemy": "2.77.0-alpha"
+  }
+}

@@ -1,0 +1,71 @@
+import assert from 'assert/strict';
+import assertBn from '@alchemyio/core-utils/utils/assertions/assert-bignumber';
+import assertEvent from '@alchemyio/core-utils/utils/assertions/assert-event';
+import assertRevert from '@alchemyio/core-utils/utils/assertions/assert-revert';
+import { ethers } from 'ethers';
+
+import { bootstrap } from '../../../bootstrap';
+import { verifyUsesFeatureFlag } from '../../../verifications';
+
+describe('AccountModule', function () {
+  const { signers, systems } = bootstrap();
+
+  let user1: ethers.Signer;
+  let user2: ethers.Signer;
+
+  let receipt: ethers.providers.TransactionReceipt;
+
+  describe('AccountModule - Account creation', function () {
+    before('identify signers', async () => {
+      [, user1, user2] = signers();
+    });
+
+    verifyUsesFeatureFlag(
+      () => systems().Core,
+      'createAccount',
+      () => systems().Core.connect(user1).createAccount(1)
+    );
+
+    describe('when user creates an account via the core system', function () {
+      before('create the account', async function () {
+        const tx = await systems().Core.connect(user1).createAccount(1);
+        receipt = await tx.wait();
+      });
+
+      it('emitted an AccountCreated event', async function () {
+        await assertEvent(
+          receipt,
+          `AccountCreated(1, "${await user1.getAddress()}")`,
+          systems().Core
+        );
+      });
+
+      it('emitted a Mint event', async function () {
+        await assertEvent(
+          receipt,
+          `Transfer("0x0000000000000000000000000000000000000000", "${await user1.getAddress()}", 1)`,
+          systems().Account
+        );
+      });
+
+      it('records the owner in the account system', async function () {
+        assert.equal(await systems().Account.ownerOf(1), await user1.getAddress());
+        assertBn.equal(await systems().Account.balanceOf(await user1.getAddress()), 1);
+      });
+
+      it('records the owner in the core system', async function () {
+        assert.equal(await systems().Core.getAccountOwner(1), await user1.getAddress());
+      });
+
+      describe('when a user tries to create an account with an accountId that already exists', () => {
+        it('reverts', async () => {
+          await assertRevert(
+            systems().Core.connect(user2).createAccount(1),
+            'TokenAlreadyMinted("1")',
+            systems().Account
+          );
+        });
+      });
+    });
+  });
+});
